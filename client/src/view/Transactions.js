@@ -1,5 +1,6 @@
 import React from "react";
 import FinancialData from "../components/FinancialData";
+import Transaction from "../components/Transaction";
 
 export default function Transactions(props) {
   const { transactions } = props;
@@ -24,11 +25,7 @@ export default function Transactions(props) {
 
       {transactions &&
         transactions.map((transaction, index) => {
-          return (
-            <div key={index}>
-              <p>{transaction.description}</p>
-            </div>
-          );
+          return <Transaction key={index} transaction={transaction} />;
         })}
     </div>
   );

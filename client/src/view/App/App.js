@@ -48,9 +48,20 @@ export default function App(props) {
 
   return (
     <Container>
-      <Title>Desafio Final do Bootcamp Full Stack</Title>
-      <Select event={retrieveData} items={periods} />
-      <Search event={handleFilter} value={filter} />
+      <Header>
+        <Title>Desafio Final do Bootcamp Full Stack</Title>
+        <div>
+          <Select event={retrieveData} items={periods} />
+          <span>
+            Filtrar Categoria: 
+            <Search event={handleFilter} value={filter} />
+          </span>
+          <span>
+            Filtrar Descrição: 
+            <Search />
+          </span>
+        </div>
+      </Header>
       {transactions && (
         <Transactions
           transactions={transactions.filter((transaction) =>
