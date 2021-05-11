@@ -8,14 +8,15 @@ const ObjectId = mongoose.Types.ObjectId;
 const TransactionModel = require("../models/transactionModel");
 
 async function getDataFromPeriod(yearMonth) {
-  const period = yearMonth.split("-");
-  const year = period[0];
-  const month = period[1];
   try {
-    const dataFromPeriod = await TransactionModel.find({ year, month });
+    const period = yearMonth.split("-");
+    const year = period[0];
+    const month = period[1];
+    const searchObj = month === "00" ? { year } : { year, month };
+    const dataFromPeriod = await TransactionModel.find(searchObj);
     return dataFromPeriod;
-  } catch (erro) {
-    throw new Error("Erro ao buscar periodo");
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -23,8 +24,8 @@ async function addNewTransaction(transaction) {
   try {
     const newTransaction = new TransactionModel(transaction);
     newTransaction.save();
-  } catch (erro) {
-    console.log(erro);
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -32,19 +33,32 @@ async function getTransactionById(id) {
   try {
     const transactionById = TransactionModel.findOne(ObjectId(id));
     return transactionById;
-  } catch (erro) {
-    console.log(erro);
+  } catch (error) {
+    console.log(error);
   }
 }
 
 async function updateTransaction(transaction) {
-  const { _id } = transaction;
-  const updatedTransaction = TransactionModel.findByIdAndUpdate(
-    _id,
-    transaction,
-    { new: true }
-  );
-  return updatedTransaction
+  try {
+    const { _id } = transaction;
+    const updatedTransaction = TransactionModel.findByIdAndUpdate(
+      _id,
+      transaction,
+      { new: true }
+    );
+    return updatedTransaction;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function deleteTransaction(id) {
+  try {
+    const deletedTransaction = TransactionModel.findByIdAndDelete(ObjectId(id));
+    return deletedTransaction;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const allFunctions = {
@@ -52,6 +66,7 @@ const allFunctions = {
   addNewTransaction,
   getTransactionById,
   updateTransaction,
+  deleteTransaction,
 };
 
 module.exports = allFunctions;

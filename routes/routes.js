@@ -8,7 +8,9 @@ transactionRouter.get("/", async (req, res) => {
   if (period !== undefined && period.match(regexRule)) {
     const dataReceive = await allFunctionsFromService.getDataFromPeriod(period);
     res.send(dataReceive);
+    return;
   }
+
   res
     .status(400)
     .send(
@@ -28,8 +30,10 @@ transactionRouter.get("/:id", async (req, res) => {
 transactionRouter.put("/", async (req, res) => {
   try {
     const transaction = req.body;
-    const updatedTransaction = await allFunctionsFromService.updateTransaction(transaction)
-    res.send(updatedTransaction)
+    const updatedTransaction = await allFunctionsFromService.updateTransaction(
+      transaction
+    );
+    res.send(updatedTransaction);
   } catch (error) {}
 });
 
@@ -44,7 +48,15 @@ transactionRouter.post("/", async (req, res) => {
 });
 
 transactionRouter.delete("/:id", async (req, res) => {
-  res.send("DELETE");
+  try {
+    const id = req.params.id;
+    const deletedTransaction = await allFunctionsFromService.deleteTransaction(
+      id
+    );
+    res.send(deletedTransaction);
+  } catch (error) {
+    res.status(500).send(erro);
+  }
 });
 
 module.exports = transactionRouter;
